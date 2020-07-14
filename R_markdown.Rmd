@@ -1,0 +1,156 @@
+title: "Wambui Kuria"
+output: Markdown file
+
+###Question
+A Kenyan entrepreneur has created an online cryptography course and would want to advertise it on her blog. She currently targets audiences originating from various countries. In the past, she ran ads to advertise a related course on the same blog and collected data in the process. She would now like to employ your services as a Data Science Consultant to help her identify which individuals are most likely to click on her ads.
+
+
+setwd("C:/Users/User/Desktop/R/Week 1 IP")
+###Step 0ne
+
+###Loading the dataset
+advertising_data <- read.csv(file = "advertising_data R.csv", stringsAsFactors = FALSE, header = TRUE)
+#
+Shape of the data
+ncol(advertising_data)
+nrow(advertising_data)
+#Our dataset has 10 columns and 1000 rows
+#
+#Previewing the tail
+tail(advertising_data)
+#
+#Previewing the head
+head(advertising_data)
+#No error on the console fr both previews, so our data is correctly loaded.
+#-----------------
+###Step two
+#Cleaning the data
+#Checking the names of the columns
+names(advertising_data)
+#
+#1.Identifying missing data
+is.na(advertising_data)
+#Finding missing data cumulatively
+colSums(is.na(advertising_data))
+#Using the age table
+table(advertising_data$Age)
+#There is no missing data
+#
+#2.Handling outliers
+#
+View(advertising_data)
+str(advertising_data)
+class(advertising_data)
+dim(advertising_data)
+#using boxplot
+boxplot.stats(advertising_data)
+#Unique items
+unique(advertising_data)
+#----------------------------
+### Step three
+
+#Univariate analysis of our data
+# a. Measures of central tendancy
+#Age mean
+age_mean <- mean(advertising_data$Age)
+age_mean
+age_median <- median(advertising_data$Age)
+age_median
+#Finding the mode for age
+getmode <- function(v) {
+  uniqv <- unique(v)
+  uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+age_mode <- getmode(advertising_data$Age)
+age_mode
+#min and max age
+age_min <- min(advertising_data$Age)
+age_max <- max(advertising_data$Age)
+age_min
+age_max
+#The mean age of the readers of the blog is 36 years, while the median age is 35,and the mode is 31.
+#Therefore, we can conclude that most viewers are between the age of 35 and 36
+time_mean <- mean(advertising_data$Daily.Time.Spent.on.Site)
+time_mean
+#The daily time users spend is 65 minutes on the site
+dailyusage_mean <- mean(advertising_data$Daily.Internet.Usage)
+dailyusage_mean
+#
+# Max and min of country
+country <- max(advertising_data$Country)
+country
+country <- min(advertising_data$Country)
+country
+#The country with the highest number of readers is Zimbabwe while the country with the lowest readers is Afghanistan
+#The viewers spend around 180 of internet on the site
+#Checking the percentage of click on ad
+table(advertising_data$Clicked.on.Ad)
+#50% of the readers/viewers do not click on the add
+#
+#Graphical representation
+#1.Box plot of age
+boxplot(advertising_data$Age)
+#Most readers are between the age of 30 and 40 with a majority between 35 and 36
+boxplot(advertising_data$Area.Income)
+income_mean <- mean(advertising_data$Area.Income)
+income_mean
+income_median <- median(advertising_data$Area.Income)
+income_median
+#Most readers have an average income of 55000
+#
+#2. Bar graph
+country <- advertising_data$Country
+country_frequency <- table(country)
+country_frequency
+barplot(country_frequency)
+#Using a histogram for age, gender and click on ad columns
+hist(advertising_data$Age)
+hist(advertising_data$Clicked.on.Ad)
+hist(advertising_data$Male)
+hist(advertising_data$Area.Income)
+#
+#-------------------------------
+### Step four
+###Bivariate analysis
+#Covariance of age and click on ad
+age <- advertising_data$Age
+click <- advertising_data$Clicked.on.Ad
+gender <- advertising_data$Male
+cov(age, click)
+#The covariance of age to click is positive meaning they're positively related
+income <- advertising_data$Area.Income
+cov(income, click)
+#As income increases, the click on ad reduces
+#
+#Using correlation coefficient
+cor(age, click)
+#There is a medium positive correlation between age and click on ad
+cor(income, click)
+#There is a medium negative correlation between age and click on ad
+ 
+#
+# Creating a scatter plot
+plot(age, click, xlab="Age", ylab="click on ad")
+plot(income, click, xlab="Income", ylab="click on ad")
+plot(gender, click, xlab="gender", ylab="click on ad")
+# Both plots reveal positive correlation
+#
+#
+#--------------------------------------
+### Step five 
+# ##Conclusion
+1.The blog is relevant to people between the ages of 30 and 40.
+2.50 % of the readers view the ad
+3.Most people who view the blog have an income of around 55,000 to 70,000
+4.The country with the highest number of readers is Zimbabwe while the country with the lowest readers is Afghanistan
+5.There's a positive relationship between age and click on ad; whereby older people tend to watch ads;
+6.There's no relationship between click on ad and gender
+#
+#
+#------------------------------------------
+# Step six
+### Recommendation
+
+1. Individuals that are most likely to click her ads on the blog are people who are older.
+2.Most people who visit her blog are in Zimbabwe and they have an income range of $55,000 and $70,000
+3.Her blog is relevant to the 30-40 age group and individuals who spend more than 180 on internet
